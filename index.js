@@ -4,7 +4,7 @@ const cors = require('cors')
 const socket = require('socket.io')
 
 app.use(cors({
-    origin:"http://localhost:3000",
+    origin:["http://localhost:3000", "https://my-it-market-frontend.vercel.app/"],
     credentials: true,
 }))
 const cookieparser = require('cookie-parser')
