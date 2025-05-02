@@ -52,8 +52,8 @@ const RegisterUser = async( req,res ) => {
 
                 res.cookie("JWT" , token , {
                     httpOnly: true,
-                    secure:false, // true in production
-                    sameSite: 'Strict', // CSRF protection
+                    secure:true, // true in production
+                    sameSite: 'None', // CSRF protection
                     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
                 })
 
@@ -107,8 +107,8 @@ const loginuser = async(req,res) => {
 
 
                     httpOnly: true,
-                    secure:false, // true in production
-                    sameSite: 'Strict', // CSRF protection
+                    secure:true, // true in production
+                    sameSite: 'None', // CSRF protection
                     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
                 })
 
