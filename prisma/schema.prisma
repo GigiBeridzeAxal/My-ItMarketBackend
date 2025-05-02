@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("PRODDATABASE_URL")
+}
+
+
+model User {
+
+   id String @id @default(cuid())
+
+  username String
+
+  password String 
+
+  email String @unique
+
+  role String @default("Client")
+
+  Funds Int @default(0)
+
+  bids Int @default(10)
+
+  description String? @db.Text 
+
+
+  headline String? @db.Text
+  
+  verified Boolean @default(false)
+
+  profilecompleated Boolean @default(false)
+
+
+
+  skills Json? 
+
+
+
+  location String @default("No Location")
+
+
+
+  profilepic String @default("noprofile")
+
+
+}
+
+
+model Projects {
+
+   id String @id @default(cuid())
+
+   projectowner String @db.Text
+ 
+   projectittle String
+
+   projectprice String
+  
+
+   projectdescription String @db.Text
+
+   projecttags Json?
+
+   hired Json?
+
+
+   projectposttime DateTime @default(now())
+
+
+
+   
+
+
+}
+
+model bid {
+
+  id String @id() @default(cuid())
+
+  bidedproject String
+
+  bidby String
+
+  bidprice Int
+
+  bidtime Int
+
+   
+
+
+}
+
+model forum {
+
+   id String @id @default(uuid())
+
+   forumowner String
+
+   forumdesc String @db.Text
+
+   forumfiles Json?
+
+   forumposttime DateTime @default(now())
+  
+}
+
+model Messages{
+
+   id String @id @default(uuid())
+
+   messageby String?
+
+   messageto String?
+
+   message String? @db.Text
+
+   sendtime DateTime @default(now())
+
+}

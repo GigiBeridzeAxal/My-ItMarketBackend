@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `user` ADD COLUMN `Funds` INTEGER NOT NULL DEFAULT 0,
+    ADD COLUMN `profilepic` VARCHAR(191) NOT NULL DEFAULT 'noprofile';

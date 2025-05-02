@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `projects` ADD COLUMN `projectposttime` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    MODIFY `projectowner` VARCHAR(191) NOT NULL;
