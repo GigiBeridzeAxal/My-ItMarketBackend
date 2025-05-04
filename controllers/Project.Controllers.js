@@ -16,7 +16,10 @@ const getprojcets = async(req,res) => {
         return new Date(b.projectposttime) - new Date(a.projectposttime)
     })
 
-    res.json(getprojectsdata)
+
+  const filtereddata = getprojectsdata.filter(data => data.projectowner != req.user)
+
+    res.json(filtereddata)
 
 
 }
@@ -47,6 +50,7 @@ const createproject = async(req,res) => {
        if(create){
   
         res.json(create)
+        io.emit("NewProjectAdded" , create)
        }
 
 

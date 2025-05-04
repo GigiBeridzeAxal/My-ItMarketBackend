@@ -4,7 +4,7 @@ const { userAuthMiddleware } = require('../middlewares/User.Middleware')
 const router = express.Router()
 
 
-router.get("/getprojects" , getprojcets)
+router.get("/getprojects"  , userAuthMiddleware, getprojcets)
 router.post('/placebid' , userAuthMiddleware , placebid)
 router.post("/getprojectdetailsbyid" , getprojectdetailsbyid)
 router.post("/createproject" , createproject)
