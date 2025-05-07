@@ -3,6 +3,18 @@ const { PrismaClient } = require("@prisma/client")
 
 const db = new PrismaClient()
 
+const { PutObjectCommand , S3Client, DeleteBucketAnalyticsConfigurationCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3')
+
+const s3client = new S3Client({
+
+    region: process.env.AWS_REGION,
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    },
+
+})
+
 const jwt = require('jsonwebtoken')
 
 
@@ -252,6 +264,60 @@ const getmyjobposts = async(req,res) => {
 
 }
 
+const changeprofileiamge = async(req,res) => {
+
+    const file = req.file
+
+    console.log(req.file)
+
+    const user = await db.user.findUnique({where:{id:req.user}})
+
+    const params = {
+        Bucket: process.env.AWS_BUCKET,
+        Key: Date.now().toString() + "-" + file?.originalname,
+        Body: file?.buffer,
+        ContentType: file?.mimetype,
+    }
+
+    const command = new PutObjectCommand(params)
+
+
+    const changefile = await s3client.send(command)
+
+
+    const deleteparams = {
+        Bucket: process.env.AWS_BUCKET,
+        Key:user.profilepic,
+    }
+    const deletecommand = new DeleteObjectCommand(deleteparams)
+    const deletefile = await s3client.send(deletecommand)
+
+    if(!deletefile) return res.status(500).send("Failed To Delete Old Profile Image")
+
+
+
+        const edit = await db.user.update({
+            where:{id:req.user},
+            data:{
+                profilepic:params.Key
+            }
+        })
+
+        if(!edit) return res.status(500).send("Failed To Update Profile Image")
+        
+        delete edit.password
+        delete edit.email
+        delete edit.Funds
+
+        res.status(200).json(edit.profilepic)
+
+
+
+
+
+
+}
+
 
 const getjobinfo = async(req,res) => {
 
@@ -324,4 +390,4 @@ const getjobinfo = async(req,res) => {
 
 }
 
-module.exports = {RegisterUser , loginuser , getmyjobposts , userdata , logout , edituser , getallfreelancerusers , getuserbyid , getjobinfo}
+module.exports = {RegisterUser , loginuser , getmyjobposts , userdata , logout , edituser , getallfreelancerusers , getuserbyid , getjobinfo , changeprofileiamge}

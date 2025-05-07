@@ -73,15 +73,19 @@ const createforumpost = async(req,res) => {
     const params = {
         Bucket: process.env.AWS_BUCKET,
         Key:Date.now().toString() + "-" + req.file?.originalname,
-        Body:req.file.buffer,
-        ContentType:req.file.mimetype,
+        Body:req.file?.buffer,
+        ContentType:req.file?.mimetype,
     }
+
+
+
+    const command = new PutObjectCommand(params)
     
-const command = new PutObjectCommand(params)
 
 
+  if(req.file){
   const send = await s3client.send(command)
-  console.log(params.Key)
+  }
 
 
 
@@ -91,7 +95,7 @@ const command = new PutObjectCommand(params)
     console.log(forumdesc)
 
 
-    if(!forumdesc){
+    if(!forumdesc && !req.file){
         return res.status(400).json({message: "Please fill all the fields"})
     }
 
